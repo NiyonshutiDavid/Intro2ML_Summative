@@ -25,7 +25,8 @@ We implemented:
 
 ## 🧠 Neural Network Architecture
 
-![NN Architecture](0d9b515e-ae52-4f39-8a45-5219c0e5b9be.png)
+![NN Architecture](https://github.com/user-attachments/assets/7fe74302-5003-44ff-b291-0ece525b9025)
+
 
 - **Input Layer:** 64 features
 - **Hidden Layers:** 32 → 16 nodes with ReLU activation
