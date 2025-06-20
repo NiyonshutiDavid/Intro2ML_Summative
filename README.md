@@ -131,6 +131,6 @@ prediction = model.predict(X_test)
 
 ## 🎥 Video Walkthrough
 
-🎬 [Insert link to your 5-minute video demo here]
+🎬 [Click here to watch](https://youtu.be/nIOJiL6qH-k)
 
 ---
