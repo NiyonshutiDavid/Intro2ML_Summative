@@ -1,63 +1,135 @@
-# Uruti AgriTech: ML-Driven Startup Evaluation
 
-## Overview
+# Uruti AgriTech – Machine Learning for Startup Evaluation
 
-Rwanda’s agriculture sector employs over 61% of the workforce and contributes 24% to GDP, yet youth-led agri-startups struggle to access funding and mentorship due to manual, biased evaluations.  
-Uruti, a Rwandan AgriTech platform, integrates a machine learning classification model to categorize applicants as “funding eligible,” “mentorship suitable,” or “rejection” based on experience, innovation, and business model clarity.  
-This project aims to enhance transparency, streamline support allocation, and empower Rwanda’s youth, supporting national innovation and inclusive growth.  
-The dataset consists of applicant features and outcomes, enabling fair, data-driven decision-making.
+### 🔬 Problem Statement
 
----
+Rwanda’s agri-sector, while critical, lacks structured evaluation for startup support. Uruti is a platform that leverages **machine learning models** to predict whether an agri-startup is:
 
-## Experimental Setup
+- ✅ **Funding Eligible**
+- 🤝 **Mentorship Suitable**
+- ❌ **Rejected**
 
-We trained and evaluated several models (Neural Networks and a traditional ML algorithm) using different hyperparameters:
-
-| Model    | Accuracy | Precision | Recall  | F1 Score | ROC AUC |
-|----------|----------|-----------|---------|----------|---------|
-| model_1  | 0.5413   | 0.5496    | 0.5413  | 0.5453   | 0.5121  |
-| model_3  | 0.4893   | 0.5300    | 0.4893  | 0.4967   | 0.4865  |
-| model_2  | 0.4327   | 0.5472    | 0.4327  | 0.4680   | 0.4822  |
-| model_4  | 0.4067   | 0.5340    | 0.4067  | 0.4228   | 0.4988  |
-| model_5  | 0.2873   | 0.5426    | 0.2873  | 0.2509   | 0.4959  |
+The project integrates real-world application data with public datasets to train and deploy predictive models.
 
 ---
 
-## Findings
+## 📊 Model Overview
 
-- **Best Combination:**  
-  The best performing model was **model_1**, achieving an F1 Score of 0.5453, ROC AUC of 0.5121, Accuracy of 0.5413, Precision of 0.5496, and Recall of 0.5413.
+We implemented:
 
-- **ML Algorithm vs Neural Network:**  
-  Based on the results, **model_1** outperformed the other models in all key metrics. (Please specify in your notebook which model corresponds to a neural network and which to a traditional ML algorithm, e.g., logistic regression.)  
-  The best results were achieved with the hyperparameters used in model_1. For the ML algorithm, tuning hyperparameters such as regularization and optimizer had a significant impact on performance.
+- ✅ **Logistic Regression, XGBoost, SVM, Random Forest** (Traditional ML)
+- ✅ **A simple feedforward Neural Network**
+- ✅ **Five optimized Neural Network variants**
 
 ---
 
-## How to Run
+## 🧠 Neural Network Architecture
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/NiyonshutiDavid/Intro2ML_Summative.git
-   cd NiyonshutiDavid/Intro2ML_Summative
+![NN Architecture](0d9b515e-ae52-4f39-8a45-5219c0e5b9be.png)
 
-Open Summative_Intro_to_ml_[David Niyonshuti]_assignment_FIXED.ipynb in Jupyter or VS Code.
+- **Input Layer:** 64 features
+- **Hidden Layers:** 32 → 16 nodes with ReLU activation
+- **Output Layer:** 3 nodes with Softmax
+- **Task:** Multiclass classification
 
-Run all cells in order. Each model implementation is modularized in its own cell.
+---
 
-To load the best saved model:
-```bash
-# Example for loading a pickle model
-import joblib
-model = joblib.load('saved_models/model_1.pkl')
+## 🧪 Neural Network Evaluation Table
+
+| Instance | Optimizer | Regularizer | Epochs | Early Stopping | Dropout | Learning Rate | Accuracy | F1 Score | Recall | Precision |
+|----------|-----------|-------------|--------|----------------|---------|----------------|----------|----------|--------|-----------|
+| 1        | Adam (default) | None        | 700    | No             | 0.00    | Default        | 0.4920   | 0.5016   | 0.4920 | 0.5125    |
+| 2        | Adagrad   | None        | 1000   | Yes(50 Epochs)             | 0.30    | 0.001          | 0.3973   | 0.4335   | 0.3973 | 0.5222    |
+| 3        | RMSprop   | L2          | 1500   | Yes(50 Epochs)            | 0.20    | 0.005          | 0.3187   | 0.2985   | 0.3187 | 0.5508    |
+| 4        | Adam      | L1          | 5000   | Yes(50 Epochs)            | 0.00    | 0.0001         | 0.5093   | 0.5141   | 0.5093 | 0.5473    |
+| 5        | SGD       | L1          | 1000   | Yes(50 Epochs)            | 0.03    | 0.006          | 0.4880   | 0.5180   | 0.4880 | 0.5802    |
+
+> 🏆 **Best NN Model:** Instance 5 (SGD + L1 + Dropout + LR 0.006)
+
+---
+
+## ⚙️ Traditional ML Model Results
+
+From the **Improved ML Comparison Notebook**:
+
+| Model              | Accuracy | F1 Score | ROC AUC |
+|--------------------|----------|----------|---------|
+| RandomForest       | 1.0000   | 1.0000   | 1.0000  |
+| GradientBoosting   | 1.0000   | 1.0000   | 1.0000  |
+| XGBoost            | 0.9968   | 0.9961   | 0.9993  |
+| LogisticRegression | 0.7738   | 0.8021   | 0.9627  |
+| SVC                | 0.7282   | 0.7684   | 0.9748  |
+
+---
+
+## 📌 Key Insights
+
+- 🔥 Despite aggressive optimization (dropout, learning rate tuning, L1/L2, early stopping), **neural networks underperformed traditional models** on this task.
+- ⚠️ Likely causes include:
+  - Class imbalance (heavily skewed toward "Funding Eligible")
+  - Neural networks being more data-hungry and sensitive to noise
+- ✅ **XGBoost**, **RandomForest**, and **GradientBoosting** outperformed all others, with nearly perfect accuracy and F1.
+
+---
+
+## ✅ Final Prediction Test (Comparison)
+
+### Neural Network:
+- ✅ Prediction: Funding Eligible  
+- ❌ Ground truth: Mentorship Needed → **Incorrect**
+
+### RandomForest:
+- ✅ Prediction: Funding Eligible  
+- ✅ Ground truth: Funding Eligible → **Correct**
+
+---
+
+## 🧱 Project Structure
+
 ```
-Directory Structure
-Intro2ML_SUMMATIVE/
-├── Summative_Intro_to_ml_[David Niyonshuti]_assignment_FIXED.ipynb
-├── Data Visualization/ Contains all visualized data and plots
-│---model_1.pkl
-└── README.md
+📁 Intro2ML_Summative/
+├── big_startup_secsees_dataset.csv # Original dataset
+├── cleaned_big_startup_secsees_dataset.csv # Processed dataset with additional funding_class column
+├── handled_big_startup_secsees_dataset.csv # Processed dataset with all needed features and handled missing values
+├── 📄 README.md
+├── 📓 Summative_Intro_to_ml_[David Niyonshuti]_assignment.ipynb # Contains all neural network models
+├── 📓 Improved_Model_Comparison_Notebook.ipynb # Contains all traditional ML models
+├── 📁 Data Visualizations/
+│   ├── 📄 Fundingclass_distribution.png
+│   ├── 📄 distribution by funding_rounds.png
+│   ├── 📄 distribution by status.pdf
+│   └── ...
+├── 📁 Models/
+│   ├── model_1.pkl
+│   ├── model_2.pkl
+│   ├── model_3.pkl
+│   ├── model_4.pkl
+│   ├── model_5.pkl
+│   └── best_model_RandomForest.pkl
+```
 
-## Video Demo
+---
 
-[Insert link to video demo]
+## ▶️ How to Run
+
+```bash
+git clone https://github.com/NiyonshutiDavid/Intro2ML_Summative.git
+cd Intro2ML_Summative
+```
+
+1. Launch Jupyter or VSCode and open the notebook.
+2. Run all cells in sequence.
+3. To load best model:
+```python
+import joblib
+model = joblib.load("best_model_RandomForest.pkl")
+prediction = model.predict(X_test)
+```
+
+---
+
+## 🎥 Video Walkthrough
+
+🎬 [Insert link to your 5-minute video demo here]
+
+---
